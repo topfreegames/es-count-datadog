@@ -1,0 +1,12 @@
+version: "2"
+services:
+  datadog-agent:
+    image: datadog/docker-dd-agent
+    command: echo STOPPED
+    environment:
+      API_KEY: 123
+    volumes:
+      - ${PWD}/checks.d:/etc/dd-agent/checks.d
+      - ${PWD}/conf.d:/etc/dd-agent/conf.d
+  elasticsearch:
+    image: elasticsearch:5.5.1

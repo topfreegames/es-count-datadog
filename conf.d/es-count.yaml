@@ -1,0 +1,16 @@
+init_config:
+instances:
+  - es_address: http://elasticsearch:9200
+    match:
+      - index: test
+        terms: 
+          - test1
+          - test2
+        time_range: 1m
+      - index: test2
+        terms:
+          - test3
+        time_range: 1m
+    tags:
+      - foo
+      - bar
