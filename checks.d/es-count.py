@@ -17,7 +17,6 @@ class ESCountCheck(AgentCheck):
         self.es_address = instance.get("es_address", DEFAULT_ELASTICSEARCH_ADDRESS)
         self.es_index = instance.get("es_index", DEFAULT_ELASTICSEARCH_index)
         self.log.debug("elasticsearch_address: " + self.es_address)
-        ## get count of each term in the last minute
         self.extra_tags = instance.get("tags", [])
         match = instance.get("match", [])
         tags = ['instance:%s' % self.hostname] + self.extra_tags
