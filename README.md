@@ -28,6 +28,11 @@ es-count.count contains the count of occurrences of {term} in the interval {now-
 
 Extra tags can be passed to the metrics sent by specifying them into the config file, e.g.
 
+
+### Names
+
+Names can be passed to be sent to datadog instead of using the term as the name
+
 ```
 init_config:
 instances:
@@ -37,6 +42,8 @@ instances:
         terms:
           - test1
           - test2
+        names:
+          - test_name_1
         time_range: 1m
       - index: test2
         terms:
