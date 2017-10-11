@@ -7,6 +7,7 @@ DEFAULT_ELASTICSEARCH_ADDRESS = 'http://elasticsearch:9200'
 DEFAULT_ELASTICSEARCH_index = 'test'
 DEFAULT_TIME_RANGE = '1m'
 
+
 class ESCountCheck(AgentCheck):
     '''
     Count the number of each term in the last minute
@@ -21,15 +22,17 @@ class ESCountCheck(AgentCheck):
         match = instance.get("match", [])
         tags = ['instance:%s' % self.hostname] + self.extra_tags
         for target in match:
-            for term in target['terms']:
+            for term, i in zip(target['terms'], range(len(target['terms']))):
                 res = self.get_number_of_occurrences('%s/%s/_search' % (self.es_address, target['index']), term, target['time_range'])
                 print res
-                if res != None and u'hits' in res:
+                if res is not None and u'hits' in res:
                     occurrences = res[u'hits'][u'total']
+                    term_name = 'term:%s' % (term.lower())
+                    if 'names' in target and len(target['names']) > i:
+                        term_name = 'term:%s' % (names[i])
                     self.count('es-count.count', occurrences,
-                            tags=tags + ['term:%s' % term.lower(),
-                                'index:%s' % target['index'].lower(),
-                                'time_range:%s' % target['time_range']])
+                               tags=tags + [term_name, 'index:%s' % target['index'].lower(),
+                                            'time_range:%s' % target['time_range']])
 
     def get_number_of_occurrences(self, uri, term, time_range):
         self.log.debug("getting occurrences for: " + term)
